@@ -11,12 +11,12 @@ myConnection = pymysql.connect( host=hostname, user=username, passwd=password, d
 print "Connected!"
 
 cursor = myConnection.cursor()     # get the cursor
-
+password = "house791"
 
 try:
 	
 	with myConnection.cursor() as cursor:
-		sql = "SELECT * FROM `user_pass` "
+		sql = "SELECT `username` FROM `user_pass` WHERE pass='%s'" % password
 		cursor.execute(sql)
 		result = cursor.fetchone()
 		print result

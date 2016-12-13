@@ -6,7 +6,15 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 from kivy.uix.tabbedpanel import TabbedPanel
- 
+
+import pymysql
+
+
+
+
+
+
+
 # You can create your kv code in the Python file
 Builder.load_string("""
 <ScreenLogin>:
@@ -113,6 +121,8 @@ Builder.load_string("""
 # Create a class for all screens in which you can include
 # helpful methods specific to that screen
 
+
+
 class ScreenLogin(Screen, Widget):
     def login(self):
         username = self.ids.username_input
@@ -123,16 +133,40 @@ class ScreenLogin(Screen, Widget):
 
         info_label = self.ids.success
 
-        if username_text == "test" and password_text == "test":
-            info_label.text = "Login Successful"
-            self.manager.transition.duration = 1
-            self.manager.transition.direction = 'left'
-            self.manager.current = 'screen_two'
+        hostname = 'localhost'
+        username = 'root'
+        password = 'root'
+        database = 'myprovi'
 
-        else: 
-            info_label.text = "Wrong Credentials"
+        print "Initiating Connection"
+        myConnection = pymysql.connect( host=hostname, user=username, passwd=password, db=database )
+        print "Connected!"
+
+        cursor = myConnection.cursor()
+
+        try:
+            with myConnection.cursor() as cursor:
+                sql = "SELECT `username` FROM `user_pass` WHERE pass='%s' " % password_text
+                cursor.execute(sql)
+                result = cursor.fetchone()
+                print result
+
+                if result:
+                    info_label.text = "Login Successful"
+                    self.manager.transition.duration = 1
+                    self.manager.transition.direction = 'left'
+                    self.manager.current = 'screen_two'
+
+                elif result is None:
+                    info_label.text = "Wrong Credentials"
+
+        except:
+            print ("Error: unable to fetch data")
+            info_label.text = "Check your internet connection"
 
 
+        myConnection.close()
+        print "Connection closed"
 
  
 class ScreenTwo(Screen):
@@ -155,6 +189,7 @@ screen_manager.add_widget(ScreenTwo(name="screen_two"))
 class MyProviApp(App):
     def build(self):
         return screen_manager
+
  
 sample_app = MyProviApp()
 sample_app.run()
