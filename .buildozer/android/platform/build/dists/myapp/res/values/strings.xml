@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyProviApp</string>
+    <string name="private_version">1481626041.25</string>
+    <string name="presplash_color">#000000</string>
+</resources>

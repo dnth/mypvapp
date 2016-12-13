@@ -1,0 +1,20 @@
+<ScreenOne>:
+    BoxLayout:
+        Button:
+            text: "Go to Screen 2"
+            on_press:
+                # You can define the duration of the change
+                # and the direction of the slide
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 1
+                root.manager.current = 'screen_two'
+ 
+<ScreenTwo>:
+    BoxLayout:
+        Button:
+            text: "Go to Screen 1"
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'screen_one'
+
+ 
